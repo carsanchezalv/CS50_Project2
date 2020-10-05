@@ -1,0 +1,40 @@
+{% extends "auctions/layout.html" %}
+<link rel="stylesheet" href="/auctions/templates/auctions/styles/index.css">
+    
+{% block body %}
+    <h2>Active Listings</h2>
+    
+    {% if messages %}
+    {% for message in messages %}
+    <div class="message">{{ message }}</div>
+    {% endfor %}
+    {% endif %}
+    {% if auctionlist %}
+    <div id="activelist">
+    
+        {% for list in auctionlist %}
+        <hr>
+        <div class = "card">
+            <div class = "mainInfo">
+                <p class="title">Title: {{list.title}}</p>
+                <p class= "cat">Category: {{list.category}}</p>
+            </div>
+            <div class = "picture">
+                {% if list.image_url %}
+                    <img src="{{ list.image_url }}" alt = "Listing image" class="imagen">
+                {% else %}
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1200px-No_image_available.svg.png" alt="No image available" class="imagen">
+                {% endif %}
+            </div>
+            <p class="desc">Description: {{ list.desc }}</p>
+            <a class="price">Bid: {{ list.starting_bid }} $ </a>
+            <a class = "bid" href="{% url 'listingpage' list.id %}">View listing</a>
+        </div>  
+        {% endfor %}
+    
+    </div>
+    {% else %}
+        <p class = "title"> No active listings</p>
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <p class="title">Title: {{list.title}}</p><br>
+        <p class= "cat">Category: {{list.category}}</p>
+        {% if messages %}
+        {% for message in messages %}
+            <div class="message">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        <div class = "picture">
+        {% if list.image_url %}
+            <img src="{{ list.image_url }}" class="imagen">
+        {% else %}
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1200px-No_image_available.svg.png" alt="No image Provided" class="imagen">
+        {% endif %}
+        </div>
+        <p class="desc">Description: {{ list.desc }}</p>
+        <div class = "price"><a><a >Present Bid: </a> {{ present_bid}} $ </div>
+        <div class = "price"><a><a>Listed By: </a> {{ list.user }}</div>
+        
+        
+        <form method="get" action = "{% url 'bid' %}">
+        <input name= "bid_amnt" placeholder = "Bid Amount" type = "number" >
+        <button class="btn btn-outline-primary" type = "submit" name = "list_d" value = {{ list.id }}>Bid Item</button>
+        
+        </form>
+        <hr class = "line">
+        <div class="bid_amnt">
+        <form method= "get" action = "{% url 'addwatchlist' %}">
+        <button class="btn btn-outline-primary" type = "submit" value = {{ list.id }} name = "listid" >Watchlist</button>
+        </form>
+        </div>
+
+
+        <div id="commentsection">
+        <h3>Comments</h3>
+        <div id="commentbox">
+            <ul>
+            {% for comment in comments %}
+            <li><a class="comment"><a>{{ comment.user }} : {{comment.comment}}</a></li>
+            {% endfor %}
+            </ul>
+        </div>
+
+        <form method = "get" action ="{% url 'allcomments' %}">
+        <input required type = "text" placeholder = "Add Comment" name = "comment">
+        <button class="btn btn-outline-primary" type = "submit" value = {{ list.id }} name = "listid"> Comment </button>
+        </form>
+        <div class= "closebid">
+        {% if list.user == user.username %}
+            <form method= "get" action = "{% url 'win_ner' %}">
+            <button class="btn btn-outline-primary" type = "submit" value = {{ list.id }} name = "listid" >Close Bid</button>
+            </form>
+        {% endif %}
+        </div>
+        </div>
+{% endblock %}

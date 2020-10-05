@@ -1,0 +1,31 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Watch List</h2>
+    <div id="activelist">
+    {% if user_watchlist %}
+        {% for list in user_watchlist %}
+        {% if list.watch_list.active_bool == True %}
+        <div class = "card">
+            <p class="title">{{list.watch_list.title}}</p>
+            <p class= "cat">{{list.watch_list.category}}</p>
+            {% if list.watch_list.image_url %}
+                <img src="{{ list.watch_list.image_url }}" class="imagen">
+            {% else %}
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1200px-No_image_available.svg.png" alt="No image Provided" class="imagen">
+            {% endif %}
+            <a class="price">Initial bid:  {{ list.watch_list.starting_bid }} $ </a>
+            <a class = "bid" href="{% url 'listingpage' list.watch_list.id %}">View listing</a>
+            
+            <form action = "{% url 'deletewatchlist' %}">
+            <button type = "submit" value = {{ list.id }} name = "listid" >Delete</button>
+            </form>
+        {% endif %}
+        </div>  
+        {% endfor %}
+    {% else %}
+        <p class = "message"> Your watchlist is empty</p>
+    {% endif %}
+
+    </div>
+{% endblock %}
